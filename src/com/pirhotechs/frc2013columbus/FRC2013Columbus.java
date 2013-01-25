@@ -8,6 +8,7 @@
 package com.pirhotechs.frc2013columbus;
 
 
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
@@ -22,11 +23,13 @@ import edu.wpi.first.wpilibj.SimpleRobot;
 public class FRC2013Columbus extends SimpleRobot {
     Joystick joy1;
     RobotDrive drivetrain;
+    Jaguar shooterMTR;
     double tempX;
     double tempY;
     public FRC2013Columbus() {
         joy1 = new Joystick(1);
         drivetrain = new RobotDrive(1,2);
+        shooterMTR = new Jaguar(3);
     }
     public void autonomous() {
         
@@ -37,20 +40,12 @@ public class FRC2013Columbus extends SimpleRobot {
      */
     public void operatorControl() {
         while(isOperatorControl() && isEnabled()) {
-            if(Math.abs(joy1.getX()) > .2) {
-                tempX = joy1.getX();
+            drivetrain.arcadeDrive(joy1);
+            if(joy1.getRawButton(8)) {
+                shooterMTR.set(1.0);
             } else {
-                tempX = 0;
+                shooterMTR.set(0.0);
             }
-            
-            if(Math.abs(joy1.getY()) > .2) {
-                tempY = joy1.getY();
-            } else {
-                tempX = 0;
-            }
-            
-            
-            drivetrain.arcadeDrive(tempY, tempX);
         }
     }
     
